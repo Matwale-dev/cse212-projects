@@ -100,6 +100,7 @@ public static class SetsAndMaps
         }
 
         return degrees;
+        
     }
 
     /// <summary>
@@ -165,7 +166,7 @@ public static class SetsAndMaps
         
         // If dictionary is empty, all characters matched exactly
         return charCount.Count == 0;
-        
+
     }
 
     /// <summary>
