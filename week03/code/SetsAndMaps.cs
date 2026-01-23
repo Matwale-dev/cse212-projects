@@ -22,7 +22,41 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        // Hash set for O(1) lookups
+        HashSet<string> seen = new HashSet<string>();
+        List<string> result = new List<string>();
+        
+        foreach (string word in words)
+        {
+            // Skip invalid words (shouldn't happen based on problem constraints)
+            if (word.Length != 2)
+                continue;
+                
+            // Create the reverse of the word
+            string reversed = new string(new char[] { word[1], word[0] });
+            
+            // Check if the reversed word is in our seen set
+            if (seen.Contains(reversed))
+            {
+                // Found a symmetric pair
+                result.Add($"{reversed} & {word}");
+                // Remove the reversed word to avoid duplicate matches
+                seen.Remove(reversed);
+            }
+            else if (word[0] == word[1])
+            {
+                // Special case: palindrome word (aa, bb, etc.)
+                // Skip it entirely - don't add to seen since it can't form a symmetric pair
+                continue;
+            }
+            else
+            {
+                // Add current word to seen for future checks
+                seen.Add(word);
+            }
+        }
+        
+        return result.ToArray();
     }
 
     /// <summary>
@@ -43,6 +77,26 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            // Check if the line has at least 4 columns (0-indexed, so index 3 is the 4th column)
+            if (fields.Length >= 4)
+            {
+                string degree = fields[3].Trim();
+                
+                // Skip empty degree entries
+                if (!string.IsNullOrEmpty(degree))
+                {
+                    // If the degree already exists in the dictionary, increment the count
+                    if (degrees.ContainsKey(degree))
+                    {
+                        degrees[degree]++;
+                    }
+                    else
+                    {
+                        // Otherwise, add it with count 1
+                        degrees[degree] = 1;
+                    }
+                }
+            }
         }
 
         return degrees;
@@ -67,7 +121,51 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Remove spaces and convert to lowercase for case-insensitive comparison
+        string cleanWord1 = new string(word1.Where(c => !char.IsWhiteSpace(c)).ToArray()).ToLower();
+        string cleanWord2 = new string(word2.Where(c => !char.IsWhiteSpace(c)).ToArray()).ToLower();
+        
+        // If the lengths are different after removing spaces, they can't be anagrams
+        if (cleanWord1.Length != cleanWord2.Length)
+            return false;
+        
+        // Dictionary to count character frequencies in word1
+        Dictionary<char, int> charCount = new Dictionary<char, int>();
+        
+        // Count characters in word1
+        foreach (char c in cleanWord1)
+        {
+            if (charCount.ContainsKey(c))
+            {
+                charCount[c]++;
+            }
+            else
+            {
+                charCount[c] = 1;
+            }
+        }
+        
+        // Subtract character counts using word2
+        foreach (char c in cleanWord2)
+        {
+            if (!charCount.ContainsKey(c))
+            {
+                // Character not found in word1, not an anagram
+                return false;
+            }
+            
+            charCount[c]--;
+            
+            // If count goes to zero, remove the key to clean up
+            if (charCount[c] == 0)
+            {
+                charCount.Remove(c);
+            }
+        }
+        
+        // If dictionary is empty, all characters matched exactly
+        return charCount.Count == 0;
+        
     }
 
     /// <summary>
