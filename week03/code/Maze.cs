@@ -33,6 +33,22 @@ public class Maze
     public void MoveLeft()
     {
         // FILL IN CODE
+         // Check if current position exists in maze map
+        if (!_mazeMap.TryGetValue((_currX, _currY), out bool[] directions))
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // directions array: [left, right, up, down]
+        // Check if we can move left (index 0)
+        if (directions[0])
+        {
+            _currX--; // Move left decreases x coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -42,6 +58,20 @@ public class Maze
     public void MoveRight()
     {
         // FILL IN CODE
+         if (!_mazeMap.TryGetValue((_currX, _currY), out bool[] directions))
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // Check if we can move right (index 1)
+        if (directions[1])
+        {
+            _currX++; // Move right increases x coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -51,6 +81,20 @@ public class Maze
     public void MoveUp()
     {
         // FILL IN CODE
+         if (!_mazeMap.TryGetValue((_currX, _currY), out bool[] directions))
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // Check if we can move up (index 2)
+        if (directions[2])
+        {
+            _currY--; // Move up decreases y coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -60,6 +104,20 @@ public class Maze
     public void MoveDown()
     {
         // FILL IN CODE
+         if (!_mazeMap.TryGetValue((_currX, _currY), out bool[] directions))
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // Check if we can move down (index 3)
+        if (directions[3])
+        {
+            _currY++; // Move down increases y coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     public string GetStatus()
